@@ -6,7 +6,9 @@ module.exports = {
   get,
   getById,
   getActionsByProjectId,
-  create
+  create,
+  update,
+  remove
 };
 
 function get() {
@@ -59,4 +61,22 @@ async function create(project) {
   const [id] = await db('projects').insert(project);
 
   return getById(id);
+}
+
+async function update(updatedProject, id) {
+  await db('projects')
+    .where({ id })
+    .update(updatedProject);
+
+  return getById(id);
+}
+
+async function remove(id) {
+  const removed = await getById(id);
+
+  await db('projects')
+    .where({ id })
+    .del();
+
+  return removed;
 }

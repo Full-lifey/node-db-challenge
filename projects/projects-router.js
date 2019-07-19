@@ -33,4 +33,18 @@ router.post('/', async (req, res) => {
   }
 });
 
+router.put('/:id', async (req, res) => {
+  try {
+    const project = await Projects.getById(req.params.id);
+    if (project) {
+      const updatedProject = await Projects.update(req.body, req.params.id);
+      res.json(updatedProject);
+    } else {
+      res.status(404).json({ error: 'could not find project with given id.' });
+    }
+  } catch (error) {
+    res.status(500).json({ message: 'Unable to update project' });
+  }
+});
+
 module.exports = router;
